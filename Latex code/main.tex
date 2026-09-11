@@ -1,0 +1,193 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{float} % Required to enforce exact figure placement [H]
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage[round]{natbib}
+\usepackage{setspace}
+\onehalfspacing
+
+\title{Replicating and Extending Romer and Romer (2004): \\ A New Measure of Monetary Shocks}
+\author{Valliammai Subramanian}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent This paper replicates the core empirical results of \citet{romerromer2004}, who develop a narrative measure of U.S. monetary policy shocks over 1969-1996 by purging the Federal Reserve's interest rate decisions of systematic responses to its own internal forecasts. Their shock series is reconstructed and their estimates of the effect of monetary policy on industrial production and producer prices are reproduced, matching their published results closely on all key statistics. The analysis is then extended to 2007 using an updated shock series constructed by \citet{wielandyang2020} following the original methodology. The extended sample shows a materially smaller peak effect of monetary shocks on both output and prices than the original 1970-1996 sample, a pattern consistent with the broader literature on declining monetary policy potency during the Great Moderation.
+\end{abstract}
+
+\section{Introduction}
+
+Estimating the causal effect of monetary policy on the real economy is complicated by two related problems. First, conventional measures of policy, such as the federal funds rate, move endogenously with economic conditions: the Federal Reserve tends to cut rates when it expects a downturn, so a naive regression of output on interest rates will understate the contractionary effect of tightening. Second, because the Federal Reserve invests heavily in forecasting, much of its policy action is anticipatory rather than surprising, further biasing simple estimates of policy's effects.
+
+\citet{romerromer2004} address both problems by constructing a narrative measure of monetary policy shocks. They first hand-coded the Federal Reserve's intended change in the federal funds rate around each FOMC meeting from 1969-1996, using the Federal Reserve's own internal records. They then regress this series on the Federal Reserve's internal (Greenbook) forecasts of output growth, inflation, and unemployment, and treat the residual from this regression as the policy shock: the portion of the interest rate decision that is not a systematic response to the Federal Reserve's own expectations about the economy.
+
+This paper has two goals. First, the Romer-Romer shock series and their headline estimates of the effect of monetary shocks on industrial production and producer prices are independently reconstructed, to confirm the reproducibility of their method. Second, the sample is extended through 2007 using an updated shock series from \citet{wielandyang2020}, and the stability of the estimated effects of monetary policy is examined in this longer, more recent period.
+
+\section{Methodology}
+
+\subsection{Constructing the shock series}
+
+The first stage of the analysis estimates
+\begin{equation}
+\Delta ff_m = \alpha + \beta \, ffb_m + \sum_{i=-1}^{2} \gamma_i \, \Delta \tilde{y}_{mi} + \sum_{i=-1}^{2} \lambda_i (\Delta \tilde{y}_{mi} - \Delta \tilde{y}_{m-1,i}) + \sum_{i=-1}^{2} \varphi_i \, \tilde{\pi}_{mi} + \sum_{i=-1}^{2} \theta_i (\tilde{\pi}_{mi} - \tilde{\pi}_{m-1,i}) + \rho \, \tilde{u}_{m0} + \varepsilon_m
+\end{equation}
+where $\Delta ff_m$ is the change in the intended federal funds rate decided at FOMC meeting $m$, $ffb_m$ is the level of the intended rate prior to the meeting, $\tilde{y}$ and $\tilde{\pi}$ are the Federal Reserve's Greenbook forecasts of output growth and inflation at each forecast horizon $i$, and $\tilde{u}_{m0}$ is the current-quarter unemployment forecast. The residual $\varepsilon_m$ is the monetary policy shock: the component of the interest rate decision not explained by the Federal Reserve's own forecasts.
+
+\subsection{Estimating the effects of policy}
+
+The shock series is converted to a monthly frequency and used to estimate the effect of policy on industrial production,
+\begin{equation}
+y_t = a_0 + \sum_{k=1}^{11} a_k D_{kt} + \sum_{i=1}^{24} b_i \, y_{t-i} + \sum_{j=1}^{36} c_j \, S_{t-j} + e_t
+\end{equation}
+and on producer prices,
+\begin{equation}
+p_t = a_0 + \sum_{k=1}^{11} a_k D_{kt} + \sum_{i=1}^{24} b_i \, p_{t-i} + \sum_{j=1}^{48} c_j \, S_{t-j} + e_t
+\end{equation}
+where $y$ and $p$ are the log growth rates of industrial production and the producer price index, $S$ is the shock series, and $D_k$ are monthly dummy variables controlling for seasonality in the non-seasonally-adjusted data. Following the original paper, the price regression includes 48 lags of the shock instead of 36, reflecting the longer lags with which monetary policy affects prices.
+
+The cumulative response of output or prices to a one-off shock is obtained by simulating equations (2) and (3) forward recursively, since the lagged dependent variable terms mean a shock's effect compounds through subsequent periods rather than being read directly off the $c_j$ coefficients.
+
+\section{Data}
+
+The meeting-level and monthly data used in the original replication (1969-1996) are taken directly from the data appendix accompanying \citet{romerromer2004}, obtained from the American Economic Association's data archive. This includes the Federal Reserve's intended funds rate series, Greenbook forecasts, industrial production, and the producer price index for finished goods.
+
+For the extension, the shock series for 1997-2007 is taken from \citet{wielandyang2020}, who re-estimate equation (1) following the original methodology, using Greenbook forecasts released with the standard five-year lag. Industrial production (FRED series \texttt{IPB50001N}) and producer prices (FRED series \texttt{WPUFD49207}, the modern successor to the discontinued series used in the original paper) are obtained from the Federal Reserve Economic Data (FRED) database for the full 1966-2007 window.
+
+\section{Replication Results}
+
+\subsection{The shock series}
+
+Estimating equation (1) on the original 1969-1996 sample yields the results in Table \ref{tab:table1}, alongside the corresponding coefficients from the original paper.
+
+\begin{table}[H]
+\centering
+\caption{Determinants of the Change in the Intended Federal Funds Rate}
+\label{tab:table1}
+\begin{tabular}{lcc}
+\toprule
+& Original (2004) & Replication \\
+\midrule
+Constant & 0.171 & 0.171 \\
+Initial level of intended funds rate & $-0.021$ & $-0.021$ \\
+Forecasted output growth (current quarter)& 0.003 & 0.003 \\
+Change in forecasted output growth (current quarter)& 0.152 & 0.152 \\
+Forecasted unemployment rate & $-0.048$ & $-0.048$ \\
+\midrule
+$R^2$ & 0.28 & 0.282 \\
+$N$ & 263 & 263 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The residuals of this regression correlate with the shock series published in the original article ($r = 1.000$), which confirms an exact replication of the shock construction.
+
+\subsection{Effects on output and prices}
+
+Table \ref{tab:table3} reports the replicated output regression (equation 2), and the replicated price regression (equation 3).
+
+\begin{table}[H]
+\centering
+\caption{Selected Results: Effect of Monetary Policy Shocks on Industrial Production and Prices}
+\label{tab:table3}
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{Output regression} & \multicolumn{2}{c}{Price regression} \\
+& Original & Replication & Original & Replication \\
+\midrule
+$R^2$ & 0.86 & 0.855 & 0.57 & 0.566 \\
+$N$ & 324 & 324 & 324 & 324 \\
+First lag of shock & 0.0038 & 0.0038 & --- & --- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Figure \ref{fig:output_response} shows the cumulative response of industrial production to a one-percentage-point monetary shock, obtained by simulating equation (2) forward. Consistent with the original paper, the estimated effect on output is essentially flat for the first four months, declines through month 22, and bottoms out at a peak effect of $-4.3\%$ around months 22-27, before partially recovering to $-1.7\%$ by month 48.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{figure2_output_response.png}
+\caption{Cumulative effect of a one-percentage-point monetary shock on industrial production, 1970--1996 sample.}
+\label{fig:output_response}
+\end{figure}
+
+Figure \ref{fig:price_response} shows the corresponding response of producer prices, which is close to zero for the first 20 months before declining steadily to $-5.9\%$ at month 48, matching the original paper's finding of a substantial delay before prices respond to policy.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{figure4_price_response.png}
+\caption{Cumulative effect of a one-percentage-point monetary shock on producer prices, 1970--1996 sample.}
+\label{fig:price_response}
+\end{figure}
+
+\section{Extension: Sample to 2007}
+
+\subsection{Motivation and methodology}
+
+The original sample ends in 1996 because Greenbook forecasts are only released publicly with a five-year lag. \citet{wielandyang2020} construct an updated shock series following the same narrative methodology through 2007. Their published shock series is used to re-estimate equations (2) and (3) on the extended 1970-2007 sample, with the specification held identical to the original replication in every other respect, so that any difference in results reflects the additional years of data rather than a change in method.
+
+\subsection{Results}
+
+Table \ref{tab:extended} compares the extended sample's regression statistics to the original.
+
+\begin{table}[H]
+\centering
+\caption{Original versus Extended Sample Regression Statistics}
+\label{tab:extended}
+\begin{tabular}{lcc}
+\toprule
+& Original (1970--1996) & Extended (1970--2007) \\
+\midrule
+Output regression $R^2$ & 0.855 & 0.866 \\
+Output regression $N$ & 324 & 432 \\
+Price regression $R^2$ & 0.566 & --- \\
+Peak output effect & $-4.3\%$ & $-3.2\%$ \\
+Output effect at month 48 & $-1.7\%$ & $-0.3\%$ \\
+Price effect at month 48 & $-5.9\%$ & $-4.2\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{output_comparison.png}
+\caption{Cumulative output response: original (1970-1996) versus extended (1970-2007) sample.}
+\label{fig:ext_output}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\textwidth]{price_comparison.png}
+\caption{Cumulative price response: original (1970-1996) versus extended (1970-2007) sample.}
+\label{fig:ext_price}
+\end{figure}
+
+Figures \ref{fig:ext_output} and \ref{fig:ext_price} plot the extended sample's cumulative impulse responses alongside the original. The extended sample shows a consistently smaller effect of monetary shocks on both output and prices than the original sample, and the pattern holds throughout the 48-month horizon rather than being concentrated at any single point, suggesting it is not an artefact of a particular specification choice.
+
+\section{Discussion}
+
+The smaller estimated effect of monetary policy in the extended sample is consistent with several strands of the macroeconomic literature. One candidate explanation is the Great Moderation: the period from the mid-1980s through 2007 was marked by substantially lower macroeconomic volatility than the 1970s, which dominated the original sample and included the Volcker disinflation. If the transmission of monetary policy to the real economy was genuinely weaker during this calmer period, extending the sample forward would mechanically dilute the estimated average effect.
+
+A second possibility is that improved central bank communication and forward guidance over the 1990s and 2000s reduced the share of policy actions that were genuine surprises, shrinking the residual variation available to identify a shock in the first place. A third is structural change in the composition of industrial production itself, which became progressively less manufacturing-intensive over this period and may have grown less interest-rate-sensitive as a result.
+
+This analysis cannot distinguish between these explanations, and no attempt is made to decide between them. What can be said with more confidence is that the qualitative pattern of monetary policy shocks having a real but more muted effect once the sample is extended past 1996 holds consistently across both the output and price regressions which strengthens the case that this is a genuine feature of the data rather than an artefact of one particular specification.
+
+\section{Conclusion}
+
+This paper replicates the central empirical results of \citet{romerromer2004}, reproducing their narrative shock series and their estimated effects of monetary policy on output and prices to within rounding error of the original published figures. Extending the analysis through 2007 using an independently constructed shock series from \citet{wielandyang2020} reveals a smaller estimated effect of monetary policy shocks on both output and prices than in the original sample, a finding consistent with the broader literature on declining monetary policy potency during the Great Moderation. Future work could investigate the underlying mechanism more directly, for example by testing whether the decline in the estimated effect is concentrated in the pre- or post-1990s portion of the extended sample, or by examining whether forward guidance reduced the residual variation in the shock series itself over time.
+
+\begin{thebibliography}{9}
+
+\bibitem[Romer and Romer(2004)]{romerromer2004}
+Romer, C.D. and Romer, D.H. (2004). A New Measure of Monetary Shocks: Derivation and Implications. \textit{American Economic Review}, 94(4), 1055--1084.
+
+\bibitem[Wieland and Yang(2020)]{wielandyang2020}
+Wieland, J.F. and Yang, M.C. (2020). Financial Dampening. \textit{Journal of Money, Credit and Banking}, 52(1), 79--113.
+
+\end{thebibliography}
+
+\end{document}

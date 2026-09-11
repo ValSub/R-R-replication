@@ -15,7 +15,7 @@ library(readxl)
 # plus the Fed's own forecasts for the economy going into that meeting.
 
 df <- read_excel(
-  "/Users/valliammaisubramanian/Downloads/116025-V1/RomerandRomerDataAppendix.xls",
+  "/Users/valliammaisubramanian/Downloads/R-R-replication/data/RomerandRomerDataAppendix.xls",
   sheet = "DATA BY MEETING"
 )
 
@@ -103,7 +103,7 @@ cor(df$RESID, df$my_shock, use = "complete.obs")
 # production and price PPI over time.
 
 df_month <- read_excel(
-  "/Users/valliammaisubramanian/Downloads/116025-V1/RomerandRomerDataAppendix.xls",
+  "/Users/valliammaisubramanian/Downloads/R-R-replication/data/RomerandRomerDataAppendix.xls",
   sheet = "DATA BY MONTH"
 )
 
@@ -259,7 +259,7 @@ cum_response_p
 # using the same method, running through 2007. We use their published shock serie here
 
 shocks_extended <- read.table(
-  "/Users/valliammaisubramanian/Downloads/RR_monetary_shock_monthly.txt",
+  "/Users/valliammaisubramanian/Downloads/R-R-replication/data/RR_monetary_shock_monthly.txt",
   header = TRUE,
   sep = ","
 )
@@ -443,5 +443,29 @@ png("~/Downloads/R-R-replication/output/figure4_price_response.png", width = 800
 plot(1:48, cum_response_p, type = "l", col = "red",
      main = "Effect of a Monetary Policy Shock on Prices",
      xlab = "Months after shock", ylab = "Percent change in PPI")
+dev.off()
+
+
+
+png("~/Downloads/R-R-replication/output/output_comparison.png", width = 800, height = 500)
+plot(1:48, cum_response, type = "l", col = "blue", lwd = 2,
+     main = "Cumulative Output Response: Original vs Extended Sample",
+     xlab = "Months after shock", ylab = "Percent change in output",
+     ylim = range(c(cum_response, cum_response_ext)))
+lines(1:48, cum_response_ext, col = "orange", lwd = 2)
+abline(h = 0, col = "gray", lty = 2)
+legend("bottomright", legend = c("Original (1970-1996)", "Extended (1970-2007)"),
+       col = c("blue", "orange"), lwd = 2)
+dev.off()
+
+png("~/Downloads/R-R-replication/output/price_comparison.png", width = 800, height = 500)
+plot(1:48, cum_response_p, type = "l", col = "blue", lwd = 2,
+     main = "Cumulative Price Response: Original vs Extended Sample",
+     xlab = "Months after shock", ylab = "Percent change in PPI",
+     ylim = range(c(cum_response_p, cum_response_ext_p)))
+lines(1:48, cum_response_ext_p, col = "orange", lwd = 2)
+abline(h = 0, col = "gray", lty = 2)
+legend("bottomright", legend = c("Original (1970-1996)", "Extended (1970-2007)"),
+       col = c("blue", "orange"), lwd = 2)
 dev.off()
 
